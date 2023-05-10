@@ -19,7 +19,7 @@ node {
         }
 
         stage("Docker Image build") {
-            sh(script: "chmod +x gradlew")
+            sh(script: "chmod 777 .")
             sh(script: "./gradlew clean bootBuildImage --imageName=${DOCKER_HUB_USER}/${IMAGE_NAME}:latest")
         }
 
@@ -42,11 +42,11 @@ node {
         remote.password = "${SSH_PASSWORD}"
         remote.allowAnyHosts = true
         stage("SSH Docker Image Pull") {
-            sshCommand remote: remote, command: "sudo docker login -u ${DOCKER_HUB_USER} -p ${DOCKER_HUB_PWD}"
-            sshCommand remote: remote, command: "sudo docker stop ${IMAGE_NAME} || true"
-            sshCommand remote: remote, command: "sudo docker rm ${IMAGE_NAME} || true"
-            sshCommand remote: remote, command: "sudo docker rmi ${IMAGE_NAME} || true"
-            sshCommand remote: remote, command: "sudo docker run --network ${DOCKER_NETWORK} -m 12g --env JAVA_OPTS='-Dspring.profiles.active=${SPRING_PROFILE} -Djasypt.encryptor.password={DJASYPT_PASSWORD} -Dfile.encoding=UTF-8 -Xmx8192m -XX:MaxMetaspaceSize=1024m' --user root -d -e TZ=Asia/Seoul --name ${IMAGE_NAME} ${DOCKER_HUB_USER}/${IMAGE_NAME}:latest"
+            sshCommand remote: remote, command: "docker login -u ${DOCKER_HUB_USER} -p ${DOCKER_HUB_PWD}"
+            sshCommand remote: remote, command: "docker stop ${IMAGE_NAME} || true"
+            sshCommand remote: remote, command: "docker rm ${IMAGE_NAME} || true"
+            sshCommand remote: remote, command: "docker rmi ${IMAGE_NAME} || true"
+            sshCommand remote: remote, command: "docker run --network ${DOCKER_NETWORK} -m 12g --env JAVA_OPTS='-Dspring.profiles.active=${SPRING_PROFILE} -Djasypt.encryptor.password={DJASYPT_PASSWORD} -Dfile.encoding=UTF-8 -Xmx8192m -XX:MaxMetaspaceSize=1024m' --user root -d -e TZ=Asia/Seoul --name ${IMAGE_NAME} ${DOCKER_HUB_USER}/${IMAGE_NAME}:latest"
         }
         // slackSend (channel: '#jenkins', color: '#00FF00', message: "SUCCESSFUL: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]' (${env.BUILD_URL})")
     }catch(e) {
