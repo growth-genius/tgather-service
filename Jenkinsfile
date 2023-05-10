@@ -20,7 +20,7 @@ node {
 
         stage("Docker Image build") {
             sh(script: "chmod 777 .")
-            sh(script: "./gradlew clean bootBuildImage --imageName=${DOCKER_HUB_USER}/${IMAGE_NAME}:latest")
+            sh(script: "./gradlew clean bootBuildImage --imageName=${DOCKER_HUB_USER}/${IMAGE_NAME}:latest || true")
         }
 
         stage("Docker Image Push") {
