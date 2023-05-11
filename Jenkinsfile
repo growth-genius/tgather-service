@@ -18,6 +18,10 @@ node {
             sh(script: 'docker rmi $(docker images -f "dangling=true" -q) || true')
         }
 
+        stage("Gradele cache delete") {
+            sh(script: "./gradlew build --refresh-dependencies")
+        }
+
         stage("Docker Image build") {
             sh(script: "chmod +x .")
             sh(script: "./gradlew clean")
