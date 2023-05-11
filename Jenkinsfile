@@ -18,10 +18,14 @@ node {
             sh(script: 'docker rmi $(docker images -f "dangling=true" -q) || true')
         }
 
-        stage("Docker Image build") {
+        stage("SpringBoot BootJar") {
+            sh(script: "chmod 775 .")
+            sh(script: "./gradlew clean bootJar")
+        }
+
+        stage("Docker Image tag") {
             try {
-              sh(script: "chmod 775 .")
-              sh "./gradlew clean bootBuildImage --imageName=${DOCKER_HUB_USER}/${IMAGE_NAME}:latest"
+              sh "docker build -t ${DOCKER_HUB_USER}/${IMAGE_NAME}:latest ."
 
             }catch (e) {
               print(e)
