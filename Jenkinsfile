@@ -1,4 +1,4 @@
-node {
+pipeline {
 
     try {
         stage('Start') {
