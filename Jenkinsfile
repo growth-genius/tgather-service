@@ -23,7 +23,7 @@ node {
               sh(script: "chmod 775 .")
               withGradle {
                   // some block
-                  sh "gradle clean bootBuildImage --imageName=${DOCKER_HUB_USER}/${IMAGE_NAME}:latest"
+                  sh "./gradlew clean bootBuildImage --imageName=${DOCKER_HUB_USER}/${IMAGE_NAME}:latest"
               }
             }catch (e) {
               print(e)
