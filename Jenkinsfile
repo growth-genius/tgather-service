@@ -13,19 +13,19 @@ node {
             checkout scm
         }
 
+        stage("Spring boot bootJar") {
+            sh(script: "chmod +x .")
+            sh(script: "./gradlew clean bootJar")
+        }
+
         stage("Docker Image Delete") {
             sh(script: "docker rmi ${IMAGE_NAME}:latest  || true")
             sh(script: 'docker rmi $(docker images -f "dangling=true" -q) || true')
         }
 
-        stage("Gradele cache delete") {
-            sh(script: "./gradlew build --refresh-dependencies")
-        }
 
         stage("Docker Image build") {
-            sh(script: "chmod +x .")
-            sh(script: "./gradlew clean")
-            sh(script: "./gradlew bootBuildImage --imageName=${DOCKER_HUB_USER}/${IMAGE_NAME}:latest")
+            sh(script: "docker build -t ${DOCKER_HUB_USER}/${IMAGE_NAME}:latest .")
         }
 
         stage("Docker Image Push") {
