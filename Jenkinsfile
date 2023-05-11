@@ -39,6 +39,7 @@ node {
             sh(script: 'docker rmi ${DOCKER_HUB_USER}/${IMAGE_NAME}:latest || true')
         }
 
+        print("connect remote")
         def remote = [:]
         remote.name = "${SSH_USER}"
         remote.user = "${SSH_USER}"
@@ -57,6 +58,7 @@ node {
         // slackSend (channel: '#jenkins', color: '#00FF00', message: "SUCCESSFUL: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]' (${env.BUILD_URL})")
     } catch(e) {
         // slackSend (channel: '#jenkins', color: '#FF0000', message: "FAILED: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]' (${env.BUILD_URL})")
+        print(e)
     }
 
 }
