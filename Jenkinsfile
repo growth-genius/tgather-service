@@ -47,7 +47,7 @@ node {
         remote.name = "${SSH_USER}"
         remote.user = "${SSH_USER}"
         remote.host = "${SSH_HOST}"
-        remote.port = "${SSH_PORT}"
+        remote.port = Integer.parseInt("${SSH_PORT}")
         remote.password = "${SSH_PASSWORD}"
         remote.allowAnyHosts = true
 
