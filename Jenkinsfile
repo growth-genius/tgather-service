@@ -16,9 +16,9 @@ node {
         stage("Docker Image Delete") {
             sh(script: "docker rmi ${IMAGE_NAME}:latest  || true")
             sh(script: 'docker rmi $(docker images -f "dangling=true" -q) || true')
+        }
 
-
-        stage ("BootJar Test") {
+        stage("BootJar Test") {
             sh(script: "./gradlew clean bootJar")
         }
 
@@ -54,7 +54,7 @@ node {
             sshCommand remote: remote, command: "docker run --network ${DOCKER_NETWORK} -m 12g --env JAVA_OPTS='-Dspring.profiles.active=${SPRING_PROFILE} -Djasypt.encryptor.password={DJASYPT_PASSWORD} -Dfile.encoding=UTF-8 -Xmx8192m -XX:MaxMetaspaceSize=1024m' --user root -d -e TZ=Asia/Seoul --name ${IMAGE_NAME} ${DOCKER_HUB_USER}/${IMAGE_NAME}:latest"
         }
         // slackSend (channel: '#jenkins', color: '#00FF00', message: "SUCCESSFUL: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]' (${env.BUILD_URL})")
-    }catch(e) {
+    } catch(e) {
         // slackSend (channel: '#jenkins', color: '#FF0000', message: "FAILED: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]' (${env.BUILD_URL})")
     }
 
