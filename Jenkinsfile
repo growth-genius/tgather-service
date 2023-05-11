@@ -25,7 +25,7 @@ node {
         }
 
         stage("Docker Image Push") {
-            withDockerRegistry(credentialsId: 'docker-hub', url: '') {
+            withDockerRegistry(credentialsId: 'docker_hub_id', url: '') {
                 // some block
                 sh "docker push ${DOCKER_HUB_USER}/${IMAGE_NAME}:latest"
             }
