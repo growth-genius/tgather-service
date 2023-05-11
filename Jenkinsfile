@@ -20,9 +20,11 @@ node {
 
         stage("Docker Image build") {
             try {
-              sh(script: "chmod +x .")
-              sh(script: "./gradlew clean")
-              sh(script: "./gradlew bootBuildImage --imageName=${DOCKER_HUB_USER}/${IMAGE_NAME}:latest")
+              sh(script: "chmod 775 .")
+              withGradle {
+                  // some block
+                  sh(script: "gradle clean bootBuildImage --imageName=${DOCKER_HUB_USER}/${IMAGE_NAME}:latest")
+              }
             }catch (e) {
               print(e)
             }
