@@ -52,6 +52,8 @@ node {
         remote.allowAnyHosts = true
 
         stage("SSH Docker Image Pull") {
+            sshCommand remote: remote, command: "hostname -I"
+            sshCommand remote: remote, command: "pwd"
             sshCommand remote: remote, command: "docker login -u ${DOCKER_HUB_USER} -p ${DOCKER_HUB_PWD}"
             sshCommand remote: remote, command: "docker stop ${IMAGE_NAME} || true"
             sshCommand remote: remote, command: "docker rm ${IMAGE_NAME} || true"
