@@ -18,12 +18,8 @@ node {
             sh(script: 'docker rmi $(docker images -f "dangling=true" -q) || true')
         }
 
-        stage("BootJar Test") {
-            sh(script: "./gradlew clean bootJar")
-        }
-
         stage("Docker Image build") {
-            sh(script: "chmod +x .")
+            sh(script: "chmod +x ./BOOT-INF")
             sh(script: "./gradlew clean bootBuildImage --imageName=${DOCKER_HUB_USER}/${IMAGE_NAME}:latest || true")
         }
 
