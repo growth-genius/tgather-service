@@ -16,6 +16,10 @@ node {
         stage("Docker Image Delete") {
             sh(script: "docker rmi ${IMAGE_NAME}:latest  || true")
             sh(script: 'docker rmi $(docker images -f "dangling=true" -q) || true')
+
+
+        stage ("BootJar Test") {
+            sh(script: "./gradlew clean bootJar")
         }
 
         stage("Docker Image build") {
