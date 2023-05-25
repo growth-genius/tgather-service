@@ -1,4 +1,4 @@
-package com.sgyj.tgather;
+package com.gg.tgather;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
