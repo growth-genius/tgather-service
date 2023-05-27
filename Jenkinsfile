@@ -18,11 +18,19 @@ node {
             sh(script: 'docker rmi $(docker images -f "dangling=true" -q) || true')
         }
 
-        stage("Docker Image build") {
-            sh(script: "chmod +x gradlew")
-            sh(script: "./gradlew clean bootBuildImage --imageName=${IMAGE_NAME}:latest")
+        stage("SpringBoot BootJar") {
+            sh(script: "chmod 775 .")
+            sh(script: "./gradlew clean bootJar")
         }
 
+        stage("Docker Image tag") {
+            try {
+              sh "docker build --no-cache -t ${DOCKER_HUB_USER}/${IMAGE_NAME}:latest ."
+
+            }catch (e) {
+              print(e)
+            }
+        }
 
         stage("Docker run"){
             sh(script: "docker stop ${IMAGE_NAME} || true")
